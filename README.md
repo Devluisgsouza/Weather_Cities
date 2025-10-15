@@ -1,2 +1,2 @@
-# Wather_Citys
+# Weather_Cities
 
