@@ -1,0 +1,193 @@
+
+/* GERAL */
+
+*{
+    padding: 0;
+    margin: 0;
+    font-family: "poppins", sans-serif;
+}
+
+body{
+    background: linear-gradient(180deg, rgb(13, 98, 138) 0%, rgb(20, 38, 63) 70%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.hide{
+    display: none;
+}
+
+.container{
+    background-image:url(../images/nuvens.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0px 0px 20px #fff;
+    border-radius: 40px;
+    width: 550px;
+    padding: 2rem;
+    transition: .3s;
+}
+
+.container:hover{
+    box-shadow: 0px 0px 20px #000;
+}
+
+/* FORM */
+
+.form h3{
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    text-shadow: 0px 0px 10px #fff;
+}
+
+.form-input-container{
+    display: flex;
+    justify-content: center;
+}
+
+.form-input-container ::placeholder{
+    color: #000000;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.form input{
+    padding: .8rem;
+    flex: 0.6;
+    margin-left: 40px;
+    border-width: 2px;
+    border-radius: 2rem;
+    background-color: transparent;
+    text-align: center;
+    color: #000;
+    font-size: 15px;
+    font-weight: 700;
+    transition: .2s;
+}
+
+.form input:focus{
+    box-shadow: 0px 0px 10px #fff;
+    outline: none;
+    transform: scale(1.02);
+}
+
+
+.form button{
+    font-size: 1rem;
+    padding: .8rem;
+    min-width: 50px;
+    margin-left: 4px;
+    border: none;
+    background-color: transparent;
+    color:#000;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.form button:hover{
+    transform: scale(1.2);
+    color: #fff;
+}
+
+/* CLIMA */
+
+#weather-data{
+    box-shadow: 0px 0px 70px #000;
+    margin-top: 4rem;
+    padding: 4rem;
+    text-align: center;
+    height: 300px;
+    border-radius: 30px;
+}
+
+#weather-data h2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: .6rem;
+    gap: 20px;
+}
+
+#weather-data h2 i{
+    font-size: 1.5rem;
+    text-shadow: 0px 0px 10px #000;
+    color: #fff;
+}
+
+#weather-data h2 span{
+    margin: .6rem 0;
+    text-shadow: 0px 0px 10px #fff;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-shadow: 0px 0px 10px #000;
+    color: #fff;
+}
+
+#weather-data #temperature{
+    font-size: 2rem;
+    font-weight: 600;
+    text-shadow: 0px 0px 10px #000;
+    color: #fff;
+    margin-top: 30px;
+}
+
+#weather-data #country:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+    transition: .5s;
+}
+
+#country{
+    height: 40px;
+}
+
+
+
+#description-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem;
+    text-transform: capitalize;
+}
+
+#description-container p{
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-shadow: 0px 0px 10px #000;
+    color: #fff;
+}
+
+#description-container img{
+    font-size: 1.5rem;
+    transition: .5s;
+}
+
+#description-container img:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+#details-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 70px;
+    gap: 50px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-shadow: 0px 0px 10px #000;
+    color: #fff;
+}
+
+#details-container i{
+    color: #7ff6ff;
+}
+
+
