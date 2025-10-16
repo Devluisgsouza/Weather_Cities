@@ -26,6 +26,12 @@
         margin-top: 6rem;
         padding: 2rem;
     }
+
+    #weather-data h2 span{
+        margin: .1rem 0;
+        font-size: 1rem;
+        font-weight: 600;
+    }
 } 
 
 
