@@ -1,103 +1,162 @@
 const apiKey = "4e950c27362cf440e08f300359e7838b";
 
-const cityInput = document.querySelector("#city-input");
-const searchBtn = document.querySelector("#search");
+// Elementos da interface
+const cityInput    = document.getElementById("city-input");
+const searchBtn    = document.getElementById("search");
+const cityEl       = document.getElementById("city");
+const tempEl       = document.getElementById("temperature-val");
+const descEl       = document.getElementById("description");
+const iconEl       = document.getElementById("weather-icon");
+const countryEl    = document.getElementById("country");
+const humidityEl   = document.getElementById("humidity");
+const windEl       = document.getElementById("wind");
+const weatherCard  = document.getElementById("weather-data");
+const loadingEl    = document.getElementById("loading");
+const errorEl      = document.getElementById("error-msg");
 
-const cityElement = document.querySelector("#city");
-const tempElement = document.querySelector("#temperature span");
-const descElement = document.querySelector("#description");
-const weatherIconElement = document.querySelector("#weather-icon");
-const countryElement = document.querySelector("#country");
-const humidityElement = document.querySelector("#humidity span");
-const windElement = document.querySelector("#wind span");
+// Mapa de temas por condição climática
+const bgMap = {
+  clear:   {
+    orb1: "#1565c0",
+    orb2: "#0288d1",
+    body: "linear-gradient(135deg, #0d1b3e 0%, #0a2a5c 50%, #071a3e 100%)"
+  },
+  cloud:   {
+    orb1: "#37474f",
+    orb2: "#546e7a",
+    body: "linear-gradient(135deg, #1a1f2e 0%, #263238 50%, #1a1f2e 100%)"
+  },
+  rain:    {
+    orb1: "#1a237e",
+    orb2: "#283593",
+    body: "linear-gradient(135deg, #0a0f1e 0%, #0d1b3e 50%, #0a0f1e 100%)"
+  },
+  storm:   {
+    orb1: "#1a0033",
+    orb2: "#4a148c",
+    body: "linear-gradient(135deg, #050510 0%, #0f0520 50%, #050510 100%)"
+  },
+  snow:    {
+    orb1: "#4fc3f7",
+    orb2: "#b3e5fc",
+    body: "linear-gradient(135deg, #1a2a3a 0%, #1e3a4a 50%, #1a2a3a 100%)"
+  },
+  mist:    {
+    orb1: "#455a64",
+    orb2: "#607d8b",
+    body: "linear-gradient(135deg, #1a1f26 0%, #243040 50%, #1a1f26 100%)"
+  },
+  default: {
+    orb1: "#1565c0",
+    orb2: "#0288d1",
+    body: "linear-gradient(135deg, #0a0f1e 0%, #0d1829 50%, #0a0f1e 100%)"
+  }
+};
 
-const weatherContainer = document.querySelector("#weather-data");
-
-// Função para mudar o background (fora de outras funções)
-function changeBackground(main, description) {
-  const body = document.body;
-  body.style.transition = "background 2s ease-in-out";
-
-  // normalize strings pra comparação
+// Atualiza background e orbs conforme condição climática
+function updateBackground(main) {
   const m = (main || "").toLowerCase();
-  const d = (description || "").toLowerCase();
+  let theme = "default";
 
-    if (m.includes("clear") || d.includes("céu limpo") || d.includes("limpo")) {
-        body.style.background = "linear-gradient(180deg, rgb(0, 160, 255) 0%, rgb(0, 80, 150) 70%)";
-    } 
-    else if (m.includes("cloud") || d.includes("nublado") || d.includes("nuvem") || d.includes("cloud")) {
-        body.style.background = "linear-gradient(180deg, rgb(100, 120, 140) 0%, rgb(40, 60, 80) 70%)";
-    } 
-    else if (m.includes("rain") || d.includes("chuva") || d.includes("drizzle")) {
-        body.style.background = "linear-gradient(180deg, rgb(40, 60, 90) 0%, rgb(20, 30, 50) 70%)";
-    } 
-    else if (m.includes("thunder") || m.includes("storm") || d.includes("tempestade") || d.includes("trovoada")) {
-        body.style.background = "linear-gradient(180deg, rgb(60, 60, 80) 0%, rgb(15, 15, 30) 70%)";
-    } 
-    else if (m.includes("snow") || d.includes("neve")) {
-        body.style.background = "linear-gradient(180deg, rgb(200, 230, 255) 0%, rgb(150, 180, 200) 70%)";
-    } 
-    else if (m.includes("mist") || m.includes("fog") || d.includes("névoa") || d.includes("neblina") || d.includes("fog")) {
-        body.style.background = "linear-gradient(180deg, rgb(150, 160, 170) 0%, rgb(90, 100, 110) 70%)";
-    } 
-    else {
-        body.style.background = "linear-gradient(180deg, rgb(13, 98, 138) 0%, rgb(20, 38, 63) 70%)";
-    }
+  if (m.includes("clear"))                          theme = "clear";
+  else if (m.includes("cloud"))                     theme = "cloud";
+  else if (m.includes("rain") || m.includes("drizzle")) theme = "rain";
+  else if (m.includes("thunder") || m.includes("storm")) theme = "storm";
+  else if (m.includes("snow"))                      theme = "snow";
+  else if (m.includes("mist") || m.includes("fog")) theme = "mist";
+
+  const t = bgMap[theme];
+  document.body.style.transition = "background 2.5s ease";
+  document.body.style.background = t.body;
+  document.querySelector(".orb1").style.background = `radial-gradient(circle, ${t.orb1}, transparent)`;
+  document.querySelector(".orb2").style.background = `radial-gradient(circle, ${t.orb2}, transparent)`;
 }
 
-// Função para buscar dados da API (fechada corretamente)
-const getWeatherData = async (city) => {
+// Controla estado de loading
+function setLoading(active) {
+  loadingEl.classList.toggle("show", active);
+  errorEl.classList.remove("show");
+  if (active) weatherCard.classList.remove("visible");
+}
+
+// Busca e exibe dados do clima
+async function fetchWeather(city) {
+  setLoading(true);
+
   try {
-    const apiWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}&lang=pt_br`;
-    const res = await fetch(apiWeatherURL);
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}&lang=pt_br`;
+    const res = await fetch(url);
 
-    if (!res.ok) {
-      // trata erro (cidade não encontrada, etc)
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.message || `Erro na requisição: ${res.status}`);
-    }
+    if (!res.ok) throw new Error(`Erro ${res.status}`);
 
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error("getWeatherData error:", error);
-    return null;
+    const d = await res.json();
+
+    cityEl.textContent      = d.name || "";
+    tempEl.textContent      = d.main ? Math.round(d.main.temp) : "";
+    descEl.textContent      = d.weather?.[0]?.description || "";
+    humidityEl.textContent  = d.main ? `${d.main.humidity}%` : "";
+    windEl.textContent      = d.wind ? `${Math.round(d.wind.speed)} km/h` : "";
+
+    iconEl.src    = d.weather?.[0]?.icon
+      ? `https://openweathermap.org/img/wn/${d.weather[0].icon}@2x.png`
+      : "";
+
+    countryEl.src = d.sys?.country
+      ? `https://flagsapi.com/${d.sys.country}/shiny/64.png`
+      : "";
+
+    updateBackground(d.weather?.[0]?.main || "");
+
+    setLoading(false);
+    weatherCard.classList.add("visible");
+
+  } catch (err) {
+    console.error("Erro ao buscar clima:", err);
+    setLoading(false);
+    errorEl.classList.add("show");
   }
-};
+}
 
-const showWeatherData = async (city) => {
-  const data = await getWeatherData(city);
-  if (!data) {
-    alert("Não foi possível obter os dados do clima. Verifique o nome da cidade e tente novamente.");
-    return;
-  }
+// =====================
+// ABAS DE CONTINENTES
+// =====================
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const continent = btn.dataset.continent;
 
-  cityElement.innerText = data.name || "";
-  tempElement.innerText = data.main ? parseInt(data.main.temp) : "";
-  descElement.innerText = data.weather && data.weather[0] ? data.weather[0].description : "";
-  weatherIconElement.setAttribute("src", data.weather && data.weather[0] ? `http://openweathermap.org/img/wn/${data.weather[0].icon}.png` : "");
-  countryElement.setAttribute("src", data.sys && data.sys.country ? `https://flagsapi.com/${data.sys.country}/shiny/64.png` : "");
-  humidityElement.innerText = data.main ? `${data.main.humidity}%` : "";
-  windElement.innerText = data.wind ? `${data.wind.speed} km/h` : "";
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
 
-  // chama a função para mudar o background — envio tanto main quanto description
-  const main = data.weather && data.weather[0] ? data.weather[0].main : "";
-  const description = data.weather && data.weather[0] ? data.weather[0].description : "";
-  changeBackground(main, description);
+    document.querySelectorAll(".continent-group").forEach(g => g.classList.remove("active"));
+    document.querySelector(`.continent-group[data-continent="${continent}"]`).classList.add("active");
+  });
+});
 
-  weatherContainer.classList.remove("hide");
-};
+// =====================
+// CHIPS DE CIDADES
+// =====================
+document.querySelectorAll(".city-chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    const city = chip.dataset.city;
+
+    document.querySelectorAll(".city-chip").forEach(c => c.classList.remove("selected"));
+    chip.classList.add("selected");
+
+    cityInput.value = chip.textContent.replace(/^\S+\s/, ""); // Remove emoji, preenche input
+    fetchWeather(city);
+  });
+});
 
 // Eventos
 searchBtn.addEventListener("click", (e) => {
   e.preventDefault();
   const city = cityInput.value.trim();
-  if (city) showWeatherData(city);
+  if (city) fetchWeather(city);
 });
 
 cityInput.addEventListener("keyup", (e) => {
-  if (e.code === "Enter") {
+  if (e.key === "Enter") {
     const city = e.target.value.trim();
-    if (city) showWeatherData(city);
+    if (city) fetchWeather(city);
   }
 });

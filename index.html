@@ -1,57 +1,171 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/responsive.css" media="screen">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,
-    600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <!-- GOOGLE FONTS -->
-    <script src="https://kit.fontawesome.com/955765ebb4.js" crossorigin="anonymous"></script>
-    <!-- FONTS AWESOME -->
-    <script src="js/scripts.js" defer></script>
-    
-    <title>Weather Page</title>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="public/clima.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather City</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <script src="js/scripts.js" defer></script>
 </head>
-
 <body>
-    <div class="container">
-        <div class="form">
-            <h3><span>WEATHER</span>&nbsp;CITY</h3>
-            <div class="form-input-container">
-                <input type="text" placeholder="City's name" id="city-input">
-                <button id="search">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-            </div>
-        </div>
-        <div id="weather-data" class="hide">
-            <h2>
-                <i class="fa-solid fa-location-dot"></i>
-                <span id="city"></span>
-                <img src="" alt="country flag" id="country">
-            </h2>
-            <p id="temperature"><span></span>&deg;C</p>
-            <div id="description-container">
-                <p id="description"></p>
-                <img src="" alt="weather conditions" id="weather-icon">
-            </div>
-            <div id="details-container">
-                <p id="humidity">
-                    <i class="fa-solid fa-droplet"></i>
-                    <span></span>
-                </p>
-                <p id="wind">
-                    <i class="fa-solid fa-wind"></i>
-                    <span></span>
-                </p>
-                
-            </div>
-        </div>
+
+  <div class="bg-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+
+  <div class="app">
+
+    <div class="logo">
+      <div class="logo-text"><em>Weather City</em></div>
+      <div class="logo-sub">Real-time weather intelligence</div>
     </div>
+
+    <div class="search-card">
+      <div class="search-row">
+        <input class="search-input" type="text" id="city-input" placeholder="Buscar cidade ou estado..." autocomplete="off">
+        <button class="search-btn" id="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Cidades populares -->
+    <div class="cities-section">
+      <div class="cities-header">
+        <span class="cities-title">Cidades populares</span>
+        <div class="continent-tabs">
+          <button class="tab-btn active" data-continent="americas">Américas</button>
+          <button class="tab-btn" data-continent="europe">Europa</button>
+          <button class="tab-btn" data-continent="asia">Ásia</button>
+          <button class="tab-btn" data-continent="other">Outros</button>
+        </div>
+      </div>
+
+      <div class="cities-grid" id="cities-grid">
+        <!-- Américas -->
+        <div class="continent-group active" data-continent="americas">
+          <button class="city-chip" data-city="New York">🗽 Nova York</button>
+          <button class="city-chip" data-city="São Paulo">🇧🇷 São Paulo</button>
+          <button class="city-chip" data-city="Los Angeles">🎬 Los Angeles</button>
+          <button class="city-chip" data-city="Toronto">🍁 Toronto</button>
+          <button class="city-chip" data-city="Buenos Aires">🇦🇷 Buenos Aires</button>
+          <button class="city-chip" data-city="Mexico City">🌮 Cidade do México</button>
+          <button class="city-chip" data-city="Rio de Janeiro">🏖️ Rio de Janeiro</button>
+          <button class="city-chip" data-city="Chicago">🏙️ Chicago</button>
+          <button class="city-chip" data-city="Lima">🇵🇪 Lima</button>
+          <button class="city-chip" data-city="Bogota">🇨🇴 Bogotá</button>
+        </div>
+
+        <!-- Europa -->
+        <div class="continent-group" data-continent="europe">
+          <button class="city-chip" data-city="London">🎡 Londres</button>
+          <button class="city-chip" data-city="Paris">🗼 Paris</button>
+          <button class="city-chip" data-city="Berlin">🇩🇪 Berlim</button>
+          <button class="city-chip" data-city="Madrid">🇪🇸 Madrid</button>
+          <button class="city-chip" data-city="Rome">🏛️ Roma</button>
+          <button class="city-chip" data-city="Amsterdam">🌷 Amsterdã</button>
+          <button class="city-chip" data-city="Vienna">🎻 Viena</button>
+          <button class="city-chip" data-city="Lisbon">🇵🇹 Lisboa</button>
+          <button class="city-chip" data-city="Moscow">🇷🇺 Moscou</button>
+          <button class="city-chip" data-city="Stockholm">🇸🇪 Estocolmo</button>
+        </div>
+
+        <!-- Ásia -->
+        <div class="continent-group" data-continent="asia">
+          <button class="city-chip" data-city="Tokyo">🗾 Tóquio</button>
+          <button class="city-chip" data-city="Beijing">🇨🇳 Pequim</button>
+          <button class="city-chip" data-city="Dubai">🏙️ Dubai</button>
+          <button class="city-chip" data-city="Singapore">🇸🇬 Singapura</button>
+          <button class="city-chip" data-city="Mumbai">🇮🇳 Mumbai</button>
+          <button class="city-chip" data-city="Seoul">🇰🇷 Seul</button>
+          <button class="city-chip" data-city="Bangkok">🇹🇭 Bangkok</button>
+          <button class="city-chip" data-city="Shanghai">🌆 Xangai</button>
+          <button class="city-chip" data-city="Taipei">🇹🇼 Taipei</button>
+          <button class="city-chip" data-city="Istanbul">🕌 Istambul</button>
+        </div>
+
+        <!-- Outros -->
+        <div class="continent-group" data-continent="other">
+          <button class="city-chip" data-city="Sydney">🦘 Sydney</button>
+          <button class="city-chip" data-city="Cairo">🏺 Cairo</button>
+          <button class="city-chip" data-city="Cape Town">🇿🇦 Cidade do Cabo</button>
+          <button class="city-chip" data-city="Nairobi">🌍 Nairóbi</button>
+          <button class="city-chip" data-city="Auckland">🇳🇿 Auckland</button>
+          <button class="city-chip" data-city="Lagos">🇳🇬 Lagos</button>
+          <button class="city-chip" data-city="Casablanca">🇲🇦 Casablanca</button>
+          <button class="city-chip" data-city="Johannesburg">🇿🇦 Joanesburgo</button>
+          <button class="city-chip" data-city="Melbourne">🇦🇺 Melbourne</button>
+          <button class="city-chip" data-city="Accra">🇬🇭 Accra</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="loading" id="loading">
+      Buscando<span class="loading-dots"><span></span><span></span><span></span></span>
+    </div>
+
+    <div class="error-msg" id="error-msg">Cidade não encontrada. Verifique o nome e tente novamente.</div>
+
+    <div class="weather-card" id="weather-data">
+      <div class="location-row">
+        <div class="location-left">
+          <div class="location-dot"></div>
+          <div class="city-name" id="city"></div>
+        </div>
+        <img src="" alt="Bandeira do país" id="country" class="country-flag">
+      </div>
+
+      <div class="temp-section">
+        <div class="temp-main">
+          <div class="temp-value" id="temperature-val"></div>
+          <div class="temp-unit">°C</div>
+        </div>
+        <div class="weather-icon-wrap">
+          <img src="" alt="Condição climática" id="weather-icon">
+        </div>
+      </div>
+
+      <div class="desc-row">
+        <div class="desc-text" id="description"></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon humidity">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#4fc3f7" stroke-width="2" stroke-linecap="round">
+              <path d="M12 2L7 12a5 5 0 0010 0L12 2z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="stat-label">Umidade</div>
+            <div class="stat-value" id="humidity"></div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon wind">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#81d4fa" stroke-width="2" stroke-linecap="round">
+              <path d="M9.59 4.59A2 2 0 1111 8H2"/>
+              <path d="M12.42 19.42A2 2 0 1014 16H2"/>
+              <path d="M8 11.99h12a4 4 0 010 8"/>
+            </svg>
+          </div>
+          <div>
+            <div class="stat-label">Vento</div>
+            <div class="stat-value" id="wind"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </body>
-
-
-
 </html>
