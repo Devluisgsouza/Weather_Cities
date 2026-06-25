@@ -181,7 +181,7 @@
     padding: 0.85rem 1.2rem;
     color: var(--text);
     font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
+    font-size: 16px;            /* >= 16px evita o zoom automático no iOS ao focar */
     font-weight: 300;
     outline: none;
     transition: all 0.25s;
@@ -665,7 +665,7 @@
     }
   
     .search-input {
-      font-size: 0.9rem;
+      font-size: 16px;          /* mantém >= 16px para não dar zoom no iOS */
       padding: 0.75rem 1rem;
     }
   

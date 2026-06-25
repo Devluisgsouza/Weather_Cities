@@ -19,39 +19,49 @@ const bgMap = {
   clear:   {
     orb1: "#1565c0",
     orb2: "#0288d1",
-    body: "linear-gradient(135deg, #0d1b3e 0%, #0a2a5c 50%, #071a3e 100%)"
+    body: "linear-gradient(135deg, #0d1b3e 0%, #0a2a5c 50%, #071a3e 100%)",
+    solid: "#0a2a5c"
   },
   cloud:   {
     orb1: "#37474f",
     orb2: "#546e7a",
-    body: "linear-gradient(135deg, #1a1f2e 0%, #263238 50%, #1a1f2e 100%)"
+    body: "linear-gradient(135deg, #1a1f2e 0%, #263238 50%, #1a1f2e 100%)",
+    solid: "#263238"
   },
   rain:    {
     orb1: "#1a237e",
     orb2: "#283593",
-    body: "linear-gradient(135deg, #0a0f1e 0%, #0d1b3e 50%, #0a0f1e 100%)"
+    body: "linear-gradient(135deg, #0a0f1e 0%, #0d1b3e 50%, #0a0f1e 100%)",
+    solid: "#0d1b3e"
   },
   storm:   {
     orb1: "#1a0033",
     orb2: "#4a148c",
-    body: "linear-gradient(135deg, #050510 0%, #0f0520 50%, #050510 100%)"
+    body: "linear-gradient(135deg, #050510 0%, #0f0520 50%, #050510 100%)",
+    solid: "#0f0520"
   },
   snow:    {
     orb1: "#4fc3f7",
     orb2: "#b3e5fc",
-    body: "linear-gradient(135deg, #1a2a3a 0%, #1e3a4a 50%, #1a2a3a 100%)"
+    body: "linear-gradient(135deg, #1a2a3a 0%, #1e3a4a 50%, #1a2a3a 100%)",
+    solid: "#1e3a4a"
   },
   mist:    {
     orb1: "#455a64",
     orb2: "#607d8b",
-    body: "linear-gradient(135deg, #1a1f26 0%, #243040 50%, #1a1f26 100%)"
+    body: "linear-gradient(135deg, #1a1f26 0%, #243040 50%, #1a1f26 100%)",
+    solid: "#243040"
   },
   default: {
     orb1: "#1565c0",
     orb2: "#0288d1",
-    body: "linear-gradient(135deg, #0a0f1e 0%, #0d1829 50%, #0a0f1e 100%)"
+    body: "linear-gradient(135deg, #0a0f1e 0%, #0d1829 50%, #0a0f1e 100%)",
+    solid: "#0a0f1e"
   }
 };
+
+// Meta usada para colorir a barra do navegador conforme o clima
+const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 
 // Atualiza background e orbs conforme condição climática
 function updateBackground(main) {
@@ -66,8 +76,18 @@ function updateBackground(main) {
   else if (m.includes("mist") || m.includes("fog")) theme = "mist";
 
   const t = bgMap[theme];
+
+  // Fundo do body (gradiente do clima)
   document.body.style.transition = "background 2.5s ease";
   document.body.style.background = t.body;
+
+  // Fundo do projeto (html) acompanha o clima — cobre overscroll e áreas fora do body
+  document.documentElement.style.transition = "background 2.5s ease";
+  document.documentElement.style.background = t.solid;
+
+  // Barra do navegador (PWA / mobile) acompanha o clima
+  if (themeColorMeta) themeColorMeta.setAttribute("content", t.solid);
+
   document.querySelector(".orb1").style.background = `radial-gradient(circle, ${t.orb1}, transparent)`;
   document.querySelector(".orb2").style.background = `radial-gradient(circle, ${t.orb2}, transparent)`;
 }
