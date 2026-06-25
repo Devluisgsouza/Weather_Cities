@@ -16,7 +16,24 @@
     --accent: #4fc3f7;
     --accent2: #81d4fa;
   }
-  
+
+  /* =====================
+     HTML BASE
+     ===================== */
+  html {
+    font-size: 93.75%;            /* escala levemente reduzida (base 15px) */
+    background: var(--bg);        /* evita fundo branco no overscroll do mobile */
+    scrollbar-width: none;        /* Firefox: esconde a barra mantendo o scroll */
+    -ms-overflow-style: none;     /* IE/Edge */
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none;                /* Chrome/Safari/Opera */
+    width: 0;
+    height: 0;
+  }
+
   /* =====================
      BASE
      ===================== */
